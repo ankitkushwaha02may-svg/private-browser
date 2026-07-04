@@ -2,11 +2,17 @@ package com.mybrowser.app
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
+import android.view.animation.AnimationUtils
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.GridView
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import com.mybrowser.app.adapter.ShortcutAdapter
 import com.mybrowser.app.model.Shortcut
 
@@ -15,6 +21,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var webView: WebView
     private lateinit var gridView: GridView
     private lateinit var homeLayout: View
+    private lateinit var toolbar: Toolbar
+    private lateinit var titleText: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,9 +31,41 @@ class MainActivity : AppCompatActivity() {
         webView = findViewById(R.id.webView)
         gridView = findViewById(R.id.gridShortcuts)
         homeLayout = findViewById(R.id.homeLayout)
+        toolbar = findViewById(R.id.toolbar)
+        titleText = findViewById(R.id.titleText)
+
+        setSupportActionBar(toolbar)
 
         setupWebView()
         setupShortcuts()
+        playEntryAnimations()
+    }
+
+    private fun playEntryAnimations() {
+        val fadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_in)
+        titleText.startAnimation(fadeIn)
+
+        val slideUp = AnimationUtils.loadAnimation(this, R.anim.slide_up)
+        gridView.startAnimation(slideUp)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_create_account -> {
+                Toast.makeText(this, "Create Account - Coming soon", Toast.LENGTH_SHORT).show()
+                return true
+            }
+            R.id.action_google_signin -> {
+                Toast.makeText(this, "Sign in with Google - Coming soon", Toast.LENGTH_SHORT).show()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     @SuppressLint("SetJavaScriptEnabled")
